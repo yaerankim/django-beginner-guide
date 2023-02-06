@@ -1,17 +1,30 @@
 from django.shortcuts import render
 from community.forms import *
+from django.views import View
 
 # Create your views here.
-def write(request):
-	if request.method == 'POST':
-		form = Form(request.POST) # request.POST에 있는 내용을 그대로 변수 form에 넣음
-		if form.is_valid(): # form에 있는 데이터가 유효하다면
-			form.save() # Database에 form의 field가 저장됨
+# 1) function-based view
+# def write(request):
+# 	if request.method == 'POST':
+# 		form = Form(request.POST) # request.POST에 있는 내용을 그대로 변수 form에 넣음
+# 		if form.is_valid(): # form에 있는 데이터가 유효하다면
+# 			form.save() # Database에 form의 field가 저장됨
             
-	# method가 POST가 아니라면
-	else:
-		form = Form() # 그냥 form을 출력해줌
-	return render(request, 'write.html', {'form':form})
+# 	# method가 POST가 아니라면
+# 	else:
+# 		form = Form() # 그냥 form을 출력해줌
+# 	return render(request, 'write.html', {'form':form})
+
+# 2) class-based view
+class MyWrite(View):
+	def post(self, request):
+		form = Form(request.POST)
+		# if form.is_vaild(): # is_valid 사용 시 form에 해당 속성 없다는 error 뜸
+		form.save()
+		return render(request, 'write.html', {'form':form})
+	def get(self, request):
+		form = Form()
+		return render(request, 'write.html', {'form':form})
 
 def list(request):
     articleList = Article.objects.all()

@@ -19,7 +19,10 @@ from community.views import *
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('write/', write, name='write'),
+    # 1) function-based view 사용 시
+    # path('write/', write, name='write'),
+    # 2) class-based view 사용 시
+    path('write/', MyWrite.as_view(), name='write'),
     path('list/', list, name='list'),
     re_path(r'^view/(?P<num>[0-9]+)/$', view),
 ]
